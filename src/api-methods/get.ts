@@ -1,9 +1,7 @@
 import { validate as isValidID } from 'uuid';
+import { getUserByID, getAllUsers } from '../utils/utils.js';
 
-const getUserByID = (users, userID) => users.filter((user) => user.id === userID)[0];
-const getAllUsers = (users) => users;
-
-export default (req, res, db, config, userID = '') => {
+export default (req: Req, res: Res, db: Users, config: Config, userID = '') => {
 
     if (userID === '') {
 
@@ -11,10 +9,7 @@ export default (req, res, db, config, userID = '') => {
 
         res.statusCode = 200
         res.setHeader('Content-Type', 'application/json')
-        res.end(users.length > 0
-            ? JSON.stringify(getAllUsers(db), null, 3)
-            : config.messages.noUsers
-            );
+        res.end(JSON.stringify(getAllUsers(db), null, 3));
             
         return;
     }

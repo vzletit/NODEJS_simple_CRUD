@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
+import {objIsValid} from '../utils/utils.js';
 
-const objIsValid = (userObj, reqFields) => reqFields.every(field => field in userObj)
-
-export default (req, res, db, config, excessParam = '') => {
+export default (req: Req, res: Res, db: Users, config: Config, excessParam = '') => {
  
     if (excessParam) {
         res.statusCode = 404;
@@ -10,7 +9,7 @@ export default (req, res, db, config, excessParam = '') => {
     }
     
     let body = '';
-    req.on('data', chunk => body += chunk.toString())
+    req.on('data', (chunk: Buffer) => body += chunk.toString())
     req.on('end', () => {
 
         const parsedBody = JSON.parse(body);
@@ -21,10 +20,12 @@ export default (req, res, db, config, excessParam = '') => {
             return;
         }
 
-        db.push({ id: uuidv4(), ...parsedBody })
+        const newUser = { ...parsedBody, id: uuidv4() }
+        
+        db.push(newUser)
         res.statusCode = 201;
         res.setHeader('Content-Type', 'application/json')
-        res.end(JSON.stringify(parsedBody, null, 3));
+        res.end(JSON.stringify(newUser, null, 3));
         return;
     })
 

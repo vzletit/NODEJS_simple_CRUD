@@ -1,8 +1,7 @@
 import { validate as isValidID } from 'uuid';
+import {getUserByID} from '../utils/utils.js';
 
-const getUserByID = (users, userID) => users.filter((user) => user.id === userID)[0];
-
-export default (req, res, db, config, userID = '') => {
+export default (req: Req, res: Res, db: Users, config: Config, userID = '') => {
 
     if (userID === '') {
         res.statusCode = 404
@@ -29,5 +28,4 @@ export default (req, res, db, config, userID = '') => {
     res.statusCode = 204
     res.end(config.messages.userDeleted);
     return;
-
 }
