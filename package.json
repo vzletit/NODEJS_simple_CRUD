@@ -7,7 +7,7 @@
   "scripts": {
     "start:dev": "nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
     "start:prod": "npx tsc && npx webpack && node dist/bundle.cjs"
-  },  
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vzletit/NodeJS_simple_CRUD.git"
@@ -22,8 +22,17 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/uuid": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-standard-with-typescript": "^26.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "nodemon": "^2.0.20",
+    "prettier": "2.8.2",
+    "stylelint-config-prettier": "^9.0.4",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",

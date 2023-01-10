@@ -1,24 +1,22 @@
-type Users = Array<User>;
+type Users = User[]
 
-type Req = {
-  on: Function;
-};
+interface Res {
+  statusCode: number
+  setHeader: Function
+  end: Function
+}
 
-type Res = {
-  statusCode: number;
-  setHeader: Function;
-  end: Function;
-};
+interface User {
+  id: string
+  username: string
+  age: number
+  hobbies?: string[]
+}
 
-type User = {
-  id: string;
-  username: string;
-  age: number;
-  hobbies?: Array<string>;
-};
+interface Config {
+  port: string
+  userRequiredFields: array<string>
+  messages: Record<string, string>
+}
 
-type Config = {
-  port: string;
-  userRequiredFields: array<string>;
-  messages: { [key: string]: string };
-};
+type Methods = Record<string, (req: IncomingMessage, res: ServerResponse, urlParam = '') => void>
