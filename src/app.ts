@@ -15,6 +15,7 @@ const config: Config = {
         userAdded: 'User added',
         userDeleted: 'User deleted',
 
+        serverError: 'Server error (not yours)',
         userNotExists: 'User not exists',
         invalidUserID: 'invalid user ID',
         apiError: 'API error. Check path or something. ¯\\_(ツ)_/¯',
@@ -47,7 +48,15 @@ export default () => {
             res.end(config.messages.apiError)
         }
 
-        if (req.method !== undefined) { methods[req.method](req, res, parsedURL[2]) }        
+        if (req.method !== undefined) { 
+        try {
+            methods[req.method](req, res, parsedURL[2]) 
+        }
+        catch {
+            res.statusCode=500
+            res.end(config.messages.serverError)
+        }
+        }        
 
     });
     server.listen(config.port);

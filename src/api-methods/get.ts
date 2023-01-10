@@ -28,7 +28,7 @@ export default (req: Req, res: Res, db: Users, config: Config, userID = '') => {
         return;
     }
 
-    res.statusCode = 200
+    res.statusCode = 200    
     res.setHeader('Content-Type', 'application/json')
     res.end(JSON.stringify(user, null, 3));
     return;
