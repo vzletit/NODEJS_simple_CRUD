@@ -5,9 +5,9 @@
   "description": "",
   "main": "./src/index.ts",
   "scripts": {
-    "start:dev": "nodemon --watch src/ --exec \"npm run start:prod\" --verbose -e ts",
-    "start:prod": "npx tsc && node build/index"
-  },
+    "start:dev": "nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
+    "start:prod": "npx tsc && npx webpack && node dist/bundle.cjs"
+  },  
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vzletit/NodeJS_simple_CRUD.git"
@@ -22,9 +22,9 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/uuid": "^9.0.0",
-    "eslint": "^8.31.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "nodemon": "^2.0.20",
-    "prettier": "^2.8.1",
+    "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
