@@ -19,7 +19,7 @@ export default (req: IncomingMessage, res: Res, db: Users, config: Config, userI
 
   const user = getUserByID(db, userID)
 
-  if (user !== undefined) {
+  if (user === undefined) {
     res.statusCode = 404
     res.end(config.messages.userNotExists)
     return

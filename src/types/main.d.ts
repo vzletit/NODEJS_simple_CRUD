@@ -14,7 +14,7 @@ interface User {
 }
 
 interface Config {
-  port: string
+  
   userRequiredFields: array<string>
   messages: Record<string, string>
 }

@@ -1,14 +1,11 @@
-import * as dotenv from 'dotenv'
 import http, { IncomingMessage, ServerResponse } from 'http'
 import GET from './api-methods/get.js'
 import POST from './api-methods/post.js'
 import PUT from './api-methods/put.js'
 import DELETE from './api-methods/delete.js'
 
-dotenv.config()
-
 const config: Config = {
-  port: process.env.PORT ?? '3000',
+
   userRequiredFields: ['username', 'age', 'hobbies'],
 
   messages: {
@@ -29,29 +26,29 @@ const db: Users = [
   //   { id: 'aa70805a-0e88-47b6-929a-7e6a20eada49', username: 'Alina Dmitrieva', age: 26, hobbies: ['cooking', 'eating'] },
 ]
 
-export default (): void => {
-  const methods: Methods = {
-    GET: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { GET(req, res, db, config, urlParam) },
-    POST: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { POST(req, res, db, config, urlParam) },
-    PUT: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { PUT(req, res, db, config, urlParam) },
-    DELETE: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { DELETE(req, res, db, config, urlParam) }
+const methods: Methods = {
+  GET: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { GET(req, res, db, config, urlParam) },
+  POST: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { POST(req, res, db, config, urlParam) },
+  PUT: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { PUT(req, res, db, config, urlParam) },
+  DELETE: (req: IncomingMessage, res: ServerResponse, urlParam = ''): void => { DELETE(req, res, db, config, urlParam) }
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const app = http.createServer((req, res) => {
+  const userInputUrl: string = req.url ?? ''
+  const parsedURL: string[] = userInputUrl.split('/').filter((path: string) => path)
+
+  if (parsedURL[0] !== 'api' && parsedURL[1] === 'users') {
+    res.statusCode = 404
+    res.end(config.messages.apiError)
   }
 
-  const server = http.createServer((req, res) => {
-    const userInputUrl: string = req.url ?? ''
-    const parsedURL: string[] = userInputUrl.split('/').filter((path: string) => path)
+  try {
+    methods[req.method as keyof Methods](req, res, parsedURL[2])
+  } catch {
+    res.statusCode = 500
+    res.end(config.messages.serverError)
+  }
+})
 
-    if (parsedURL[0] !== 'api' && parsedURL[1] === 'users') {
-      res.statusCode = 404
-      res.end(config.messages.apiError)
-    }
-
-    try {
-      methods[req.method as keyof Methods](req, res, parsedURL[2])
-    } catch {
-      res.statusCode = 500
-      res.end(config.messages.serverError)
-    }
-  })
-  server.listen(config.port)
-}
+export default app
