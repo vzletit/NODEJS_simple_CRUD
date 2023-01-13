@@ -1,16 +1,7 @@
 /* eslint-disable */
 import supertest from 'supertest'
 
-import app from '../build/test.js'
-
-const serverConfig = {
-  api: '/api/users',
-  host: 'localhost',
-  port: '4000'
-}
-
-const api = supertest(app(serverConfig))
-
+const api = supertest('http://localhost:4000')
 
 const emptyUserList = []
 const newUser = {  

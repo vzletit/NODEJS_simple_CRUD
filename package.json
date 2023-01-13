@@ -6,7 +6,11 @@
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
-    "start:dev:multi": "nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts"    
+    "start:dev:multi": "nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts",
+    "start:prod": "npx tsc && npx webpack && node dist/bundle.cjs",
+    "start:multi": "npx tsc && npx webpack && node dist/bundle.cjs --multi",    
+    "test": "concurrently -k \"npx tsc && node build/index\" \"cross-env NODE_OPTIONS=--experimental-vm-modules npx jest\""
+     
   },
   "repository": {
     "type": "git",
@@ -24,6 +28,7 @@
     "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "babel-jest": "^29.3.1",
+    "concurrently": "^7.6.0",
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-config-standard-with-typescript": "^26.0.0",
