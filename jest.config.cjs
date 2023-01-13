@@ -1,5 +1,4 @@
-module.exports = {
-  setupFilesAfterEnv: ['jest-expect-message'],
+module.exports = {  
   preset: 'ts-jest',
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',

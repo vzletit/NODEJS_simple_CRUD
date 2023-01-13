@@ -1,22 +1,22 @@
-type Users = User[]
+interface serverConfig {
+  api: string
+  host: string
+  port: string | number
+}
 
-interface Res {
-  statusCode: number
-  setHeader: Function
-  end: Function
+type Db = User[]
+type DbMethods = Record<string, DbMethod>
+type DbMethod = (object) => object
+interface DbResponse {
+  status: number
+  payload: string | object
 }
 
 interface User {
-  id: string
+  id?: string
   username: string
   age: number
-  hobbies?: string[]
+  hobbies: string[]
 }
 
-interface Config {
-  
-  userRequiredFields: array<string>
-  messages: Record<string, string>
-}
-
-type Methods = Record<string, (req: IncomingMessage, res: ServerResponse, urlParam = '') => void>
+type Methods = Record<string, (urlParam = '') => void>

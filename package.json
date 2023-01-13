@@ -6,8 +6,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
-    "start:prod": "npx tsc && npx webpack && node dist/bundle.cjs",
-    "test": "npx tsc && cross-env NODE_OPTIONS=--experimental-vm-modules npx jest"    
+    "start:dev:multi": "nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts"    
   },
   "repository": {
     "type": "git",
