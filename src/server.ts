@@ -72,13 +72,15 @@ const runServer = (serverConfig: serverConfig) => http.createServer((req, res) =
   methods[req.method ?? 'GET'](urlParam)
 
   try {
-    process.on('message', (dbResponse: DbResponse) => {
-      console.log(`Response sent by server with pid#${process.pid} running on port ${+process.env.PORT}`)
+    const giveResponse = (dbResponse: DbResponse) => {
+      console.log(`Response from server pid #${process.pid} / port ${+process.env.PORT}`)
 
       res.statusCode = dbResponse.status
       res.end(JSON.stringify(dbResponse.payload, null, 1))
-      process.removeAllListeners()
-    })
+    }
+    process.on('message', giveResponse)
+
+    setTimeout(() => { process.removeListener('message', giveResponse) }, 1000)
   } catch {
     res.statusCode = 500
     res.end(messages.serverError)

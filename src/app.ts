@@ -4,6 +4,14 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
+if (process.env.PORT === undefined) {
+  console.log('-----------------------------------------------------------------------------')
+  console.log('!!!! PORT is not defined. Please rename ".env-example" to ".env" and restart.')
+  console.log('-----------------------------------------------------------------------------')
+  console.log('')
+  process.exit(0)
+}
+
 const app = () => {
   const host = '127.0.0.1'
   const port = +process.env.PORT ?? 4000

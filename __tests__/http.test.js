@@ -19,7 +19,7 @@ const updatedUser = {
 let newUserId = '';
 
 test('GET all users should return 200 and empty array', async () => {
-  const res = await api.get('/api/users')
+  const res = await api.get('/api/users').set('Accept', 'application/json')
   expect(res.status).toEqual(200)
   expect(res.type).toEqual(expect.stringContaining('application/json'));
   expect(res.body).toEqual(emptyUserList);    

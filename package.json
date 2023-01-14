@@ -1,5 +1,5 @@
 {
-  "name": "NodeJS_simple_CRUD",
+  "name": "NodeJS-simple-CRUD",
   "type": "module",
   "version": "1.0.0",
   "description": "HTTP server CRUD with in-memory DB and clustering",
