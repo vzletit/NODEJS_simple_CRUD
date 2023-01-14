@@ -1,16 +1,16 @@
 {
-  "name": "NodeJS-simple-CRUD",
+  "name": "nodejs-simple-crud",
   "type": "module",
   "version": "1.0.0",
-  "description": "HTTP server CRUD with in-memory DB and clustering",
+  "description": "CRUD API with in-memory DB and clustering",
   "main": "./src/index.ts",
   "scripts": {
-    "start:dev": "rm -r build && nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
-    "start:dev:multi": "rm -r build && nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts",
+    "start:dev": "rm -rf build && nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
+    "start:dev:multi": "rm -rf build && nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts",
     "start:prod": "webpack && node --input-type=commonjs dist/bundle.cjs",
     "start:prod:multi": "webpack && node dist/bundle --multi",
     "build": "webpack --node-env=production",
-    "test": "npx tsc && cross-env NODE_OPTIONS=--experimental-vm-modules npx jest && rm -r build"
+    "test": "npx tsc && cross-env NODE_OPTIONS=--experimental-vm-modules npx jest && rm -rf build"
     
   },
   "repository": {
@@ -18,7 +18,7 @@
     "url": "git+https://github.com/vzletit/NodeJS_simple_CRUD.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Dmitry Agurkov",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/vzletit/NodeJS_simple_CRUD/issues"

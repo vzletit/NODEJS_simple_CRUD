@@ -19,9 +19,14 @@ const runServer = (serverConfig: serverConfig, dbMethods: DbMethods) => http.cre
   const processReqByMode = (dbReq: DbRequest) => {
     res.setHeader('Content-Type', 'application/json')
     if (serverConfig.mode === 'single' && dbMethods !== undefined) {
-      const { status, payload } = dbMethods[dbReq.action](dbReq.args)
-      res.statusCode = status
-      res.end(JSON.stringify(payload))
+      try {
+        const { status, payload } = dbMethods[dbReq.action](dbReq.args)
+        res.statusCode = status
+        res.end(JSON.stringify(payload))
+      } catch (e) {
+        res.statusCode = 500
+        res.end(messages.serverError)
+      }
     } else {
       process.send(dbReq)
     }

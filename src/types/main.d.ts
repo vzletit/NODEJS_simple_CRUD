@@ -3,7 +3,6 @@ interface serverConfig {
   mode: string
   host?: string
   port?: number
-
 }
 
 type Db = User[]
