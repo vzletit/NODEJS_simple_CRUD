@@ -1,5 +1,5 @@
 
-# HTTP CRUD server with clustering
+# NODE JS CRUD API with clustering
 (RS School NodeJS course project)
 
 An HTTP server that can process CRUD requests (get/add/update/delete users) and interact with the database both synchronously and via IPC.
@@ -88,7 +88,7 @@ Server will return user object with generated *id* and *201* status code. If new
 ```http
   PUT /api/users/${id}
 ```
-User is an JSON object, same as new user above. 
+User is an JSON object, similar to new user (above). 
 Server will return updated user object and *200* status code. If user not exists — will return *404* code. If *id* is not valid *uuid* — will return *400*. If update user's object is not valid JSON — status code *500* and error message will be returned.
 
 
@@ -104,7 +104,7 @@ Server will return *204* status code. If user not exists — will return *404* c
 
 ## Running Tests
 
-To run tests, run the following command
+To run tests, run the following command:
 
 ```bash
   npm run test
