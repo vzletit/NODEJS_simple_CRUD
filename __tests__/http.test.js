@@ -1,7 +1,12 @@
 /* eslint-disable */
 import supertest from 'supertest'
+import app from '../build/server.js'
+import db from '../build/db/db.js'
 
-const api = supertest('http://localhost:4000')
+const api = supertest(app({
+  api: '/api/users',  
+  mode: 'single'
+}, db))
 
 const emptyUserList = []
 const newUser = {  
@@ -61,3 +66,7 @@ test('PUT should update user by given id and return updated user object with the
     expect(res.status).toEqual(404)    
   })
   
+  afterAll((done) => {
+    //api.close();
+    done();
+  });

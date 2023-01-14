@@ -1,4 +1,3 @@
-
 import http from 'http'
 import messages from './messages/messages.js'
 
@@ -11,19 +10,27 @@ const isJsonValid = (str: string) => {
   return true
 }
 
-const runServer = (serverConfig: serverConfig) => http.createServer((req, res) => {
+const runServer = (serverConfig: serverConfig, dbMethods: DbMethods) => http.createServer((req, res) => {
   const sendError = (statusCode: number, message: string) => {
     res.statusCode = statusCode
     res.end(message)
-    console.log(`Error sent by server with pid#${process.pid} running on port ${+process.env.PORT}`)
   }
 
-  res.setHeader('Content-Type', 'application/json')
+  const processReqByMode = (dbReq: DbRequest) => {
+    res.setHeader('Content-Type', 'application/json')
+    if (serverConfig.mode === 'single' && dbMethods !== undefined) {
+      const { status, payload } = dbMethods[dbReq.action](dbReq.args)
+      res.statusCode = status
+      res.end(JSON.stringify(payload))
+    } else {
+      process.send(dbReq)
+    }
+  }
 
   const methods: Methods = {
 
     GET: (urlParam = '') => {
-      process.send({ action: 'getUserByID', args: { userID: urlParam } })
+      processReqByMode({ action: 'getUserByID', args: { userID: urlParam } })
     },
 
     POST: (urlParam = '') => {
@@ -38,8 +45,8 @@ const runServer = (serverConfig: serverConfig) => http.createServer((req, res) =
         const serializedData = Buffer.concat(buffers).toString()
 
         if (!isJsonValid(serializedData)) {
-          sendError(400, messages.jsonError)
-        } else { process.send({ action: 'addUser', args: { body: JSON.parse(serializedData) } }) }
+          sendError(500, messages.jsonError)
+        } else { processReqByMode({ action: 'addUser', args: { body: JSON.parse(serializedData) } }) }
       })
     },
 
@@ -50,14 +57,14 @@ const runServer = (serverConfig: serverConfig) => http.createServer((req, res) =
         const serializedData = Buffer.concat(buffers).toString()
 
         if (!isJsonValid(serializedData)) {
-          sendError(400, messages.jsonError)
+          sendError(500, messages.jsonError)
         } else {
-          process.send({ action: 'updateUser', args: { userID: urlParam, body: JSON.parse(serializedData) } })
+          processReqByMode({ action: 'updateUser', args: { userID: urlParam, body: JSON.parse(serializedData) } })
         }
       })
     },
 
-    DELETE: (urlParam = '') => { process.send({ action: 'deleteUser', args: { userID: urlParam } }) }
+    DELETE: (urlParam = '') => { processReqByMode({ action: 'deleteUser', args: { userID: urlParam } }) }
   }
 
   const userInputUrl: string = req.url ?? ''
@@ -73,7 +80,7 @@ const runServer = (serverConfig: serverConfig) => http.createServer((req, res) =
 
   try {
     const giveResponse = (dbResponse: DbResponse) => {
-      console.log(`Response from server pid #${process.pid} / port ${+process.env.PORT}`)
+      if (serverConfig.mode !== 'single') { console.log(`Response from server pid #${process.pid} / port ${+process.env.PORT}`) }
 
       res.statusCode = dbResponse.status
       res.end(JSON.stringify(dbResponse.payload, null, 1))

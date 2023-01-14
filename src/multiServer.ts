@@ -5,7 +5,6 @@ import os from 'os'
 import db from './db/db.js'
 import messages from './messages/messages.js'
 
-
 const workersNum = os.cpus().length
 
 const availablePorts: number[] = []
@@ -14,8 +13,11 @@ let currentPort = 4001
 
 export default (serverConfig: serverConfig): void => {
   if (cluster.isPrimary) {
+    console.log('-----------------------------------------------------------')
     console.log(':: MULTI server mode ::')
     console.log(`Master process (db runner) with PID ${process.pid} is listening on port ${serverConfig.port}`)
+    console.log(`Actual API URL is: http://${serverConfig.host}:${serverConfig.port}${serverConfig.api}`)
+    console.log('-----------------------------------------------------------')
 
     for (let i = 1; i < workersNum + 1; i++) {
       availablePorts.push(+serverConfig.port + i)
@@ -55,7 +57,7 @@ export default (serverConfig: serverConfig): void => {
 
     http.createServer(onRequest).listen(4000)
   } else {
-    server(serverConfig).listen(process.env.PORT, () => {
+    server(serverConfig, {}).listen(process.env.PORT, () => {
       console.log(`НTTP server with PID ${process.pid} is running on port ${+process.env.PORT}`)
     })
   }

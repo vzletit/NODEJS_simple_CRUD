@@ -1,12 +1,14 @@
 interface serverConfig {
   api: string
-  host: string
-  port: number
+  mode: string
+  host?: string
+  port?: number
+
 }
 
 type Db = User[]
-type DbMethods = Record<string, DbMethod>
-type DbMethod = (args: DbPayload) => DbResponse | {}
+type DbMethods = Record<string, DbMethod> | undefined
+type DbMethod = (args: DbPayload) => DbResponse
 
 interface DbPayload {
   userID?: string

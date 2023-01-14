@@ -5,9 +5,9 @@ const db: Db = []
 const dbMethods: DbMethods = {
 
   validateObject: function ({ body }) {
-    return ['username', 'age', 'hobbies'].every((field) => field in body)
-      ? {}
-      : { status: 400, payload: messages.noReqFields }
+    if (!['username', 'age', 'hobbies'].every((field) => field in body)) {
+      return { status: 400, payload: messages.noReqFields }
+    }
   },
   getAllUsers: function () {
     return { status: 200, payload: db }
@@ -24,7 +24,7 @@ const dbMethods: DbMethods = {
   addUser: function (payload) {
     const { body } = payload
     const bodyValidationResult = this.validateObject(payload)
-    if (bodyValidationResult.status === 400) { return bodyValidationResult }
+    if (bodyValidationResult?.status === 400) { return bodyValidationResult }
     const newUserWithId = { ...body, id: uuidv4() }
     db.push(newUserWithId)
     return { status: 201, payload: newUserWithId }
@@ -37,7 +37,7 @@ const dbMethods: DbMethods = {
     if (userToUpdate.status === 404) { return userToUpdate }
 
     const bodyValidationResult = this.validateObject(payload)
-    if (bodyValidationResult.status === 400) { return bodyValidationResult }
+    if (bodyValidationResult?.status === 400) { return bodyValidationResult }
 
     const userIndex = db.indexOf(userToUpdate.payload)
 

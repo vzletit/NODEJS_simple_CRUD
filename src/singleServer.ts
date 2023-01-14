@@ -1,27 +1,13 @@
 import server from './server.js'
-import cluster from 'cluster'
-import db from './db/db.js'
-import messages from './messages/messages.js'
+import dbMethods from './db/db.js'
 
-export default (serverConfig: serverConfig): void => {
-  if (cluster.isPrimary) {
-    console.log(':: SINGLE server mode ::')
-    console.log(`DB runner with PID ${process.pid} started`)
-
-    const worker = cluster.fork()
-
-    worker.on('message', (dbRequest) => {
-      const { action, args } = dbRequest
-      try {
-        const response = db[action](args)
-        worker.send(response)
-      } catch {
-        worker.send({ status: 500, payload: messages.serverError })
-      }
+export default (serverConfig: serverConfig) => server(serverConfig, dbMethods)
+  .listen(
+    serverConfig.port,
+    serverConfig.host,
+    () => {
+      console.log(`-----------------------------------------------------------`)
+      console.log(`НTTP server is running in single mode`)
+      console.log(`Actual API URL is: http://${serverConfig.host}:${serverConfig.port}${serverConfig.api}`)
+      console.log(`-----------------------------------------------------------`)
     })
-  } else {
-    server(serverConfig).listen(serverConfig.port, () => {
-      console.log(`НTTP server with PID ${process.pid} is running on port ${+serverConfig.port}`)
-    })
-  }
-}
