@@ -1,12 +1,23 @@
 interface serverConfig {
   api: string
   host: string
-  port: string | number
+  port: number
 }
 
 type Db = User[]
 type DbMethods = Record<string, DbMethod>
-type DbMethod = (object) => object
+type DbMethod = (args: DbPayload) => DbResponse | {}
+
+interface DbPayload {
+  userID?: string
+  body?: User
+}
+
+interface DbRequest {
+  action: string
+  args?: DbPayload
+}
+
 interface DbResponse {
   status: number
   payload: string | object
@@ -19,4 +30,4 @@ interface User {
   hobbies: string[]
 }
 
-type Methods = Record<string, (urlParam = '') => void>
+type Methods = Record<string, (urlParam: string) => void>

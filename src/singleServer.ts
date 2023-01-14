@@ -1,6 +1,7 @@
-import server from './server.js'
+import server from './server'
 import cluster from 'cluster'
-import db from './db/db.js'
+import db from './db/db'
+import messages from './messages/messages'
 
 export default (serverConfig: serverConfig): void => {
   if (cluster.isPrimary) {
@@ -9,11 +10,14 @@ export default (serverConfig: serverConfig): void => {
 
     const worker = cluster.fork()
 
-    worker.on('message', (message) => {
-      const { action, args } = message
-      const response = db[action](args)
-
-      worker.send(response)
+    worker.on('message', (dbRequest) => {
+      const { action, args } = dbRequest
+      try {
+        const response = db[action](args)
+        worker.send(response)
+      } catch {
+        worker.send({ status: 500, payload: messages.serverError })
+      }
     })
   } else {
     server(serverConfig).listen(serverConfig.port, () => {

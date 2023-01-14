@@ -1,6 +1,6 @@
 
 import http from 'http'
-import messages from './messages/messages.js'
+import messages from './messages/messages'
 
 const isJsonValid = (str: string) => {
   try {
@@ -11,7 +11,7 @@ const isJsonValid = (str: string) => {
   return true
 }
 
-const runServer = (serverConfig: any) => http.createServer((req, res) => {
+const runServer = (serverConfig: serverConfig) => http.createServer((req, res) => {
   const sendError = (statusCode: number, message: string) => {
     res.statusCode = statusCode
     res.end(message)

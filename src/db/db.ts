@@ -1,10 +1,10 @@
-import messages from '../messages/messages.js'
+import messages from '../messages/messages'
 import { v4 as uuidv4, validate as isValidID } from 'uuid'
 
 const db: Db = []
 const dbMethods: DbMethods = {
 
-  validateObject: function (body: object) {
+  validateObject: function ({ body }) {
     return ['username', 'age', 'hobbies'].every((field) => field in body)
       ? {}
       : { status: 400, payload: messages.noReqFields }
@@ -21,19 +21,22 @@ const dbMethods: DbMethods = {
       ? { status: 200, payload: user }
       : { status: 404, payload: messages.userNotExists }
   },
-  addUser: function ({ body }) {
-    const bodyValidationResult = this.validateObject(body)
+  addUser: function (payload) {
+    const { body } = payload
+    const bodyValidationResult = this.validateObject(payload)
     if (bodyValidationResult.status === 400) { return bodyValidationResult }
     const newUserWithId = { ...body, id: uuidv4() }
     db.push(newUserWithId)
     return { status: 201, payload: newUserWithId }
   },
-  updateUser: function ({ userID, body }) {
+  updateUser: function (payload) {
+    const { userID, body } = payload
+
     if (!isValidID(userID)) { return { status: 400, payload: messages.invalidUserID } }
     const userToUpdate = this.getUserByID({ userID })
     if (userToUpdate.status === 404) { return userToUpdate }
 
-    const bodyValidationResult = this.validateObject(body)
+    const bodyValidationResult = this.validateObject(payload)
     if (bodyValidationResult.status === 400) { return bodyValidationResult }
 
     const userIndex = db.indexOf(userToUpdate.payload)
