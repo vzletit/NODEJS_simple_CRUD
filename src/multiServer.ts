@@ -1,9 +1,9 @@
 import http, { IncomingMessage, ServerResponse } from 'http'
-import server from './server'
+import server from './server.js'
 import cluster from 'cluster'
 import os from 'os'
-import db from './db/db'
-import messages from './messages/messages'
+import db from './db/db.js'
+import messages from './messages/messages.js'
 
 
 const workersNum = os.cpus().length

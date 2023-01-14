@@ -1,6 +1,6 @@
 
 import http from 'http'
-import messages from './messages/messages'
+import messages from './messages/messages.js'
 
 const isJsonValid = (str: string) => {
   try {

@@ -2,10 +2,11 @@
   "compilerOptions": {
     "outDir": "./build/",
     "noImplicitAny": true,
-    "module": "NodeNext",
+    "target": "ES2015",
+    "module": "ES2020",
     "allowSyntheticDefaultImports" : true,
     "esModuleInterop" : true,
-    "target": "es5",    
+    
     "allowJs": true,
     "moduleResolution": "node"
   },

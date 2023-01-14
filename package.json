@@ -1,16 +1,16 @@
 {
-  "name": "my-webpack-project",
-  "type": "commonjs",
+  "name": "NodeJS_simple_CRUD",
+  "type": "module",
   "version": "1.0.0",
-  "description": "My webpack project",
+  "description": "HTTP server CRUD with in-memory DB and clustering",
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
     "start:dev:multi": "nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts",
-    "start:prod": "webpack && node dist/bundle",
+    "start:prod": "webpack && node --input-type=commonjs dist/bundle.cjs",
     "start:multi": "webpack && node dist/bundle --multi",
     "build": "webpack --node-env=production",
-    "test": "concurrently -k \"npx tsc && node build/index\" \"sleep 3 && cross-env NODE_OPTIONS=--experimental-vm-modules npx jest\""    
+    "test": "concurrently -k \"npx tsc && node build/index\" \"sleep 5 && cross-env NODE_OPTIONS=--experimental-vm-modules npx jest && rm -r build\""    
   },
   "repository": {
     "type": "git",

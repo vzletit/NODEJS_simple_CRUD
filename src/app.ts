@@ -1,5 +1,5 @@
-import runSingleServer from './singleServer'
-import runMultiServer from './multiServer'
+import runSingleServer from './singleServer.js'
+import runMultiServer from './multiServer.js'
 import * as dotenv from 'dotenv'
 
 dotenv.config()

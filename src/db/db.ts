@@ -1,4 +1,4 @@
-import messages from '../messages/messages'
+import messages from '../messages/messages.js'
 import { v4 as uuidv4, validate as isValidID } from 'uuid'
 
 const db: Db = []

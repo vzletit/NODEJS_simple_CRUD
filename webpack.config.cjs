@@ -1,7 +1,9 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
-  target: "node",
+  
+  mode: 'production',
+  target: 'node',
   entry: './src/index.ts',
   devtool: 'inline-source-map',
   module: {
@@ -9,16 +11,20 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-    ],
+        exclude: /node_modules/
+      }
+    ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.ts', '.js'],
+    extensionAlias: {
+      '.js': ['.ts', '.js']
+    }
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'bundle.cjs',
     path: path.resolve(__dirname, 'dist'),
+  
     clean: true
   }
 }
