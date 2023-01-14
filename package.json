@@ -8,7 +8,7 @@
     "start:dev": "rm -rf build && nodemon --watch src/ --exec \"npx tsc && node build/index\" --verbose -e ts",
     "start:dev:multi": "rm -rf build && nodemon --watch src/ --exec \"npx tsc && node build/index --multi\" --verbose -e ts",
     "start:prod": "webpack && node --input-type=commonjs dist/bundle.cjs",
-    "start:prod:multi": "webpack && node dist/bundle --multi",
+    "start:prod:multi": "webpack && node --input-type=commonjs dist/bundle.cjs --multi",
     "build": "webpack --node-env=production",
     "test": "npx tsc && cross-env NODE_OPTIONS=--experimental-vm-modules npx jest && rm -rf build"
     
