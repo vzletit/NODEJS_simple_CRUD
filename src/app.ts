@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 
-const app = () => {
+const app = async () => {
   const host = '127.0.0.1'
   const port = +process.env.PORT ?? 4000
   const mode = process.argv[2]
@@ -17,7 +17,7 @@ const app = () => {
       mode: 'multi'
     }
 
-    runMultiServer(serverConfig)
+await runMultiServer(serverConfig)
   } else {
     const serverConfig = {
       api: '/api/users',
@@ -26,7 +26,7 @@ const app = () => {
       port
     }
 
-    return runSingleServer(serverConfig)
+    return await runSingleServer(serverConfig)
   }
 }
 

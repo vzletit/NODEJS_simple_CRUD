@@ -3,7 +3,7 @@ import supertest from 'supertest'
 import app from '../build/server.js'
 import db from '../build/db/db.js'
 
-const api = supertest(app({
+const api = supertest(await app({
   api: '/api/users',  
   mode: 'single'
 }, db))

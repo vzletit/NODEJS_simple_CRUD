@@ -7,7 +7,7 @@ interface serverConfig {
 
 type Db = User[]
 type DbMethods = Record<string, DbMethod> | undefined
-type DbMethod = (args: DbPayload) => DbResponse
+type DbMethod = (args: DbPayload) => Promise<DbResponse>
 
 interface DbPayload {
   userID?: string

@@ -11,7 +11,7 @@ const availablePorts: number[] = []
 let currentPortIndex = 0
 let currentPort = 4001
 
-export default (serverConfig: serverConfig): void => {
+export default async (serverConfig: serverConfig): Promise<void> => {
   if (cluster.isPrimary) {
     console.log('-----------------------------------------------------------')
     console.log(':: MULTI server mode ::')
@@ -23,10 +23,10 @@ export default (serverConfig: serverConfig): void => {
       availablePorts.push(+serverConfig.port + i)
       const worker = cluster.fork({ PORT: +serverConfig.port + i })
 
-      worker.on('message', (dbRequest) => {
+      worker.on('message', async (dbRequest) => {
         const { action, args } = dbRequest
         try {
-          const response = db[action](args)
+          const response = await db[action](args)
           worker.send(response)
         } catch {
           worker.send({ status: 500, payload: messages.serverError })
@@ -34,7 +34,7 @@ export default (serverConfig: serverConfig): void => {
       })
     }
 
-    const onRequest = (clientReq: IncomingMessage, clientRes: ServerResponse): void => {
+    const onRequest = async (clientReq: IncomingMessage, clientRes: ServerResponse): Promise<void> => {
       const options = {
         hostname: serverConfig.host,
         path: clientReq.url,
@@ -57,7 +57,7 @@ export default (serverConfig: serverConfig): void => {
 
     http.createServer(onRequest).listen(4000)
   } else {
-    server(serverConfig, {}).listen(process.env.PORT, () => {
+    (await server(serverConfig, {})).listen(process.env.PORT, () => {
       console.log(`НTTP server with PID ${process.pid} is running on port ${+process.env.PORT}`)
     })
   }

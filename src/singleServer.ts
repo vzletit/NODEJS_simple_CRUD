@@ -1,7 +1,7 @@
 import server from './server.js'
 import dbMethods from './db/db.js'
 
-export default (serverConfig: serverConfig) => server(serverConfig, dbMethods)
+export default async (serverConfig: serverConfig) => (await server(serverConfig, dbMethods))
   .listen(
     serverConfig.port,
     serverConfig.host,

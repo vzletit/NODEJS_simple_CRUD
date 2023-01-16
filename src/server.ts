@@ -9,24 +9,20 @@ const isJsonValid = (str: string) => {
     return false
   }
 
-  return typeof parsed.age === 'number' 
-  && typeof parsed.username === 'string' 
-  && Array.isArray(parsed.hobbies)
-  ? true
-  : false
+  return true
 }
 
-const runServer = (serverConfig: serverConfig, dbMethods: DbMethods) => http.createServer((req, res) => {
+const runServer = async (serverConfig: serverConfig, dbMethods: DbMethods) => http.createServer( async (req, res) => {
   const sendError = (statusCode: number, message: string) => {
     res.statusCode = statusCode
     res.end(message)
   }
 
-  const processReqByMode = (dbReq: DbRequest) => {
+  const processReqByMode = async (dbReq: DbRequest) => {
     res.setHeader('Content-Type', 'application/json')
     if (serverConfig.mode === 'single' && dbMethods !== undefined) {
       try {
-        const { status, payload } = dbMethods[dbReq.action](dbReq.args)
+        const { status, payload } = await dbMethods[dbReq.action](dbReq.args)
         res.statusCode = status
         res.end(JSON.stringify(payload))
       } catch (e) {
@@ -40,11 +36,11 @@ const runServer = (serverConfig: serverConfig, dbMethods: DbMethods) => http.cre
 
   const methods: Methods = {
 
-    GET: (urlParam = '') => {
-      processReqByMode({ action: 'getUserByID', args: { userID: urlParam } })
+    GET: async (urlParam = '') => {
+      await processReqByMode({ action: 'getUserByID', args: { userID: urlParam } })
     },
 
-    POST: (urlParam = '') => {
+    POST: async (urlParam = '') => {
       if (urlParam !== '') {
         sendError(400, messages.apiError)
         return
@@ -52,30 +48,31 @@ const runServer = (serverConfig: serverConfig, dbMethods: DbMethods) => http.cre
 
       const buffers: Buffer[] = []
       req.on('data', (chunk: Buffer) => (buffers.push(chunk)))
-      req.on('end', () => {
+      req.on('end', async () => {
         const serializedData = Buffer.concat(buffers).toString()
 
         if (!isJsonValid(serializedData)) {
           sendError(500, messages.jsonError)
-        } else { processReqByMode({ action: 'addUser', args: { body: JSON.parse(serializedData) } }) }
+          return
+        } else { await processReqByMode({ action: 'addUser', args: { body: JSON.parse(serializedData) } }) }
       })
     },
 
-    PUT: (urlParam = '') => {
+    PUT: async (urlParam = '') => {
       const buffers: Buffer[] = []
       req.on('data', (chunk: Buffer) => (buffers.push(chunk)))
-      req.on('end', () => {
+      req.on('end', async () => {
         const serializedData = Buffer.concat(buffers).toString()
 
         if (!isJsonValid(serializedData)) {
           sendError(500, messages.jsonError)
         } else {
-          processReqByMode({ action: 'updateUser', args: { userID: urlParam, body: JSON.parse(serializedData) } })
+          await processReqByMode({ action: 'updateUser', args: { userID: urlParam, body: JSON.parse(serializedData) } })
         }
       })
     },
 
-    DELETE: (urlParam = '') => { processReqByMode({ action: 'deleteUser', args: { userID: urlParam } }) }
+    DELETE: async (urlParam = '') => { await processReqByMode({ action: 'deleteUser', args: { userID: urlParam } }) }
   }
 
   const userInputUrl: string = req.url ?? ''
