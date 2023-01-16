@@ -26,8 +26,7 @@ const dbMethods: DbMethods = {
   },
   addUser: async function (payload) {
     const { body } = payload
-    const bodyValidationResult = await this.validateObject(payload)
-    console.log(bodyValidationResult)
+    const bodyValidationResult = await this.validateObject(payload)    
     if (bodyValidationResult?.status === 400) { return bodyValidationResult }
     const newUserWithId = { ...body, id: uuidv4() }
     db.push(newUserWithId)    

@@ -93,9 +93,9 @@ const runServer = async (serverConfig: serverConfig, dbMethods: DbMethods) => ht
       res.statusCode = dbResponse.status
       res.end(JSON.stringify(dbResponse.payload, null, 1))
     }
-    process.on('message', giveResponse)
+    process.once('message', giveResponse)
 
-    setTimeout(() => { process.removeListener('message', giveResponse) }, 1000)
+    // setTimeout(() => { process.removeListener('message', giveResponse) }, 1000)
   } catch {
     res.statusCode = 500
     res.end(messages.serverError)
