@@ -2,12 +2,18 @@ import http from 'http'
 import messages from './messages/messages.js'
 
 const isJsonValid = (str: string) => {
+  let parsed: User;
   try {
-    JSON.parse(str)
+    parsed = JSON.parse(str)
   } catch (e) {
     return false
   }
-  return true
+
+  return typeof parsed.age === 'number' 
+  && typeof parsed.username === 'string' 
+  && Array.isArray(parsed.hobbies)
+  ? true
+  : false
 }
 
 const runServer = (serverConfig: serverConfig, dbMethods: DbMethods) => http.createServer((req, res) => {
