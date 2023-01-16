@@ -2,12 +2,12 @@
 # NODE JS CRUD API with clustering
 (RS School NodeJS course project)
 
-An HTTP server that can process CRUD requests (get/add/update/delete users) and interact with the database both synchronously and via IPC.
+An HTTP server that can process CRUD requests (get/add/update/delete users) and interact with the in-memory database.
 The application operates in one of two modes:
 
-**single** — Single server created, communication with the database occurs synchronously. Actual API URL: **http://localhost:4000/api/users**
+**single** — Single server created. Actual API URL: **http://localhost:4000/api/users**
 
-**multi** — Master (db runner) creates several servers by number of CPU cores, assigns them to different ports and sequentially distributes incoming HTTP requests upon them (Round-robin algorithm). Communication with the database occurs asynchronously via IPC. Actual API URL: **http://localhost:4000/api**
+**multi** — Master (db runner) creates several servers by the number of CPU cores, assigns them to different ports and sequentially distributes incoming HTTP requests upon them (using round-robin algorithm). Communication with the database occurs via IPC. Actual API URL: **http://localhost:4000/api**
 
 
 
