@@ -1,7 +1,9 @@
 const path = require('path')
 
 module.exports = {
-  
+  experiments: {
+    topLevelAwait: true
+  },
   mode: 'production',
   target: 'node',
   entry: './src/index.ts',
@@ -24,7 +26,6 @@ module.exports = {
   output: {
     filename: 'bundle.cjs',
     path: path.resolve(__dirname, 'dist'),
-  
     clean: true
   }
 }
