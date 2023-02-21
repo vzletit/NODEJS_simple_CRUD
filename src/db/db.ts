@@ -5,10 +5,13 @@ const db: Db = []
 const dbMethods: DbMethods = {
 
   validateObject: async function ({ body }) {
-    if (!['username', 'age', 'hobbies'].every((field) => field in body) 
-    || typeof body.age !== 'number' 
-    || typeof body.username !== 'string' 
-    || !Array.isArray(body.hobbies)) {     
+    if (!['username', 'age', 'hobbies'].every((field) => field in body) ||
+    typeof body.age !== 'number' ||
+    typeof body.username !== 'string' ||
+    !Array.isArray(body.hobbies) ||
+    !body.hobbies.every(hobby => typeof hobby === 'string')
+
+    ) {
       return { status: 400, payload: messages.noReqFields }
     }
   },
@@ -26,18 +29,18 @@ const dbMethods: DbMethods = {
   },
   addUser: async function (payload) {
     const { body } = payload
-    const bodyValidationResult = await this.validateObject(payload)    
+    const bodyValidationResult = await this.validateObject(payload)
     if (bodyValidationResult?.status === 400) { return bodyValidationResult }
     const newUserWithId = { ...body, id: uuidv4() }
-    db.push(newUserWithId)    
+    db.push(newUserWithId)
     return { status: 201, payload: newUserWithId }
   },
   updateUser: async function (payload) {
     const { userID, body } = payload
 
     if (!isValidID(userID)) { return { status: 400, payload: messages.invalidUserID } }
-    
-        const userToUpdate = await this.getUserByID({ userID })
+
+    const userToUpdate = await this.getUserByID({ userID })
     if (userToUpdate.status === 404) { return userToUpdate }
 
     const bodyValidationResult = await this.validateObject(payload)
