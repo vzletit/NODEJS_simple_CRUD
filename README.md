@@ -5,9 +5,9 @@
 An HTTP server that can process CRUD requests (get/add/update/delete users) and interact with the in-memory database.
 The application operates in one of two modes:
 
-**single** — Single server created. Actual API URL: **http://localhost:4000/api/users**
+**single** — Single server will be created. Actual API URL: **http://localhost:4000/api/users**
 
-**multi** — Master (db runner) creates several servers by the number of CPU cores, assigns them to different ports and sequentially distributes incoming HTTP requests upon them (using round-robin algorithm). Communication with the database occurs via IPC. Actual API URL: **http://localhost:4000/api**
+**multi** — Master (db runner) creates several servers by the number of CPU cores, assigns them to different ports and sequentially distributes incoming HTTP requests upon them (using round-robin algorithm). Communication with the database provided via IPC. Actual API URL: **http://localhost:4000/api**
 
 
 
